@@ -2,9 +2,46 @@ import React, { useState, useEffect, useRef } from 'react';
 import Article from './components/Article';
 import PromptGenerator from './components/PromptGenerator';
 import Navigation from './components/Navigation';
+import type {Language} from './types';
+
+const LANGUAGE_STORAGE_KEY = 'cleanRoomLanguage';
+
+const metadata: Record<Language, {title: string; description: string}> = {
+  en: {
+    title: 'Clean Room, Claude Code, and the Time Bomb',
+    description:
+      'A bilingual guide to clean room development, Claude Code, and why AI-assisted reconstruction could reshape software law.',
+  },
+  de: {
+    title: 'Clean Room, Claude Code und die tickende Zeitbombe',
+    description:
+      'Ein zweisprachiger Text über Clean Room Development, Claude Code und die Frage, wie KI das Software-Urheberrecht unter Druck setzt.',
+  },
+};
+
+function getInitialLanguage(): Language {
+  if (typeof window === 'undefined') {
+    return 'en';
+  }
+
+  const savedLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+  if (savedLanguage === 'en' || savedLanguage === 'de') {
+    return savedLanguage;
+  }
+
+  return window.navigator.language.toLowerCase().startsWith('de') ? 'de' : 'en';
+}
+
+function updateMetaTag(selector: string, value: string) {
+  const element = document.querySelector<HTMLMetaElement>(selector);
+  if (element) {
+    element.content = value;
+  }
+}
 
 export default function App() {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [language, setLanguage] = useState<Language>(getInitialLanguage);
   const articleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -55,6 +92,22 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+  }, [language]);
+
+  useEffect(() => {
+    const {title, description} = metadata[language];
+
+    document.documentElement.lang = language;
+    document.title = title;
+    updateMetaTag('meta[name="description"]', description);
+    updateMetaTag('meta[property="og:title"]', title);
+    updateMetaTag('meta[property="og:description"]', description);
+    updateMetaTag('meta[name="twitter:title"]', title);
+    updateMetaTag('meta[name="twitter:description"]', description);
+  }, [language]);
+
   return (
     <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-[#5C9E9A]/30 flex flex-col">
       {/* Scroll Progress Bar */}
@@ -65,7 +118,7 @@ export default function App() {
         />
       </div>
 
-      <Navigation />
+      <Navigation language={language} onLanguageChange={setLanguage} />
       <div className="max-w-[1600px] w-full mx-auto grid grid-cols-1 lg:grid-cols-2 flex-1 lg:overflow-hidden">
         
         {/* Left Column: Article */}
@@ -85,14 +138,14 @@ export default function App() {
           </div>
 
           <div className="max-w-2xl mx-auto relative z-10">
-            <Article />
+            <Article language={language} />
           </div>
         </div>
 
-        {/* Right Column: Prompt Generator */}
+        {/* Right Column: Commentary */}
         <div className="lg:h-[calc(100vh-89px)] bg-slate-50 p-8 md:p-16 lg:p-24 lg:overflow-y-auto flex items-center justify-center relative min-h-screen lg:min-h-0 custom-scrollbar">
-          <div className="w-full max-w-xl h-[800px] relative z-10">
-            <PromptGenerator />
+          <div className="w-full max-w-xl relative z-10">
+            <PromptGenerator language={language} />
           </div>
         </div>
 
