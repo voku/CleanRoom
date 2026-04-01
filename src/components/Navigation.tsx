@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { ExternalLink, Menu, X } from 'lucide-react';
 
 export default function Navigation() {
   const [active, setActive] = useState('Home');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navItems = ['Home', 'Clean Room', 'Claude Code', 'Open Source', 'Generator'];
+  const contributeHref = 'https://github.com/voku/CleanRoom';
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
@@ -40,33 +41,44 @@ export default function Navigation() {
       </a>
       
       {/* Desktop Menu */}
-      <div className="hidden md:flex items-center gap-10 text-[15px] text-slate-600">
-        {navItems.map((item) => (
-          <a
-            key={item}
-            href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
-            onClick={(e) => {
-              e.preventDefault();
-              setActive(item);
-              const element = document.getElementById(item.toLowerCase().replace(/\s+/g, '-'));
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            aria-current={active === item ? 'page' : undefined}
-            className={`group relative py-2 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5C9E9A] focus-visible:ring-offset-4 rounded-sm px-1 ${
-              active === item ? 'text-slate-900 font-medium' : 'hover:text-slate-900'
-            }`}
-          >
-            {item}
-            <span 
-              className={`absolute bottom-0 left-0 w-full h-[2px] rounded-full bg-[#5C9E9A] transform origin-left transition-transform duration-300 ease-out ${
-                active === item ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+      <div className="hidden md:flex items-center gap-8 text-[15px] text-slate-600">
+        <div className="flex items-center gap-10">
+          {navItems.map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
+              onClick={(e) => {
+                e.preventDefault();
+                setActive(item);
+                const element = document.getElementById(item.toLowerCase().replace(/\s+/g, '-'));
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              aria-current={active === item ? 'page' : undefined}
+              className={`group relative py-2 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5C9E9A] focus-visible:ring-offset-4 rounded-sm px-1 ${
+                active === item ? 'text-slate-900 font-medium' : 'hover:text-slate-900'
               }`}
-              aria-hidden="true"
-            />
-          </a>
-        ))}
+            >
+              {item}
+              <span
+                className={`absolute bottom-0 left-0 w-full h-[2px] rounded-full bg-[#5C9E9A] transform origin-left transition-transform duration-300 ease-out ${
+                  active === item ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                }`}
+                aria-hidden="true"
+              />
+            </a>
+          ))}
+        </div>
+        <a
+          href={contributeHref}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 font-medium text-slate-700 transition-colors hover:border-[#5C9E9A] hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5C9E9A] focus-visible:ring-offset-4"
+        >
+          Contribute
+          <ExternalLink className="h-4 w-4" />
+        </a>
       </div>
       
       {/* Mobile Menu Button */}
@@ -107,6 +119,15 @@ export default function Navigation() {
               {item}
             </a>
           ))}
+          <a
+            href={contributeHref}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-2 flex items-center justify-between rounded-md border border-slate-200 px-4 py-3 font-medium text-slate-700 transition-colors hover:border-[#5C9E9A] hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5C9E9A]"
+          >
+            Contribute on GitHub
+            <ExternalLink className="h-4 w-4" />
+          </a>
         </div>
       )}
     </nav>

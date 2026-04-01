@@ -1,5 +1,4 @@
 {
   "name": "Clean Room Prompt Generator",
-  "description": "An interactive article about AI and clean room software engineering, featuring a dynamic prompt generator for clean room migrations.",
-  "requestFramePermissions": []
+  "description": "An interactive guide to clean room engineering with a prompt generator for structured, behavior-driven implementations."
 }
