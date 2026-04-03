@@ -534,7 +534,7 @@ export default function PromptGenerator({language}: PromptGeneratorProps) {
             </div>
           </div>
 
-          <pre className="rounded-xl bg-slate-900 p-4 text-sm leading-6 text-slate-200 whitespace-pre-wrap">
+          <pre className="rounded-xl bg-slate-900 p-4 text-sm whitespace-pre-wrap leading-6 text-slate-200">
             {prompt}
           </pre>
         </div>
