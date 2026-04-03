@@ -158,6 +158,7 @@ const copy = {
         'Reference the tests or checks that demonstrate the recreated behavior.',
       ],
     },
+    fallbackAgent: 'the selected agent',
   },
   de: {
     title: 'Clean Room Prompt Generator',
@@ -242,6 +243,7 @@ const copy = {
         'Verweise auf Tests oder Checks, die das rekonstruierte Verhalten belegen.',
       ],
     },
+    fallbackAgent: 'den ausgewählten Agenten',
   },
 } satisfies Record<
   Language,
@@ -278,6 +280,7 @@ const copy = {
       workflow: string[];
       output: string[];
     };
+    fallbackAgent: string;
   }
 >;
 
@@ -298,7 +301,7 @@ function buildPrompt(language: Language, form: PromptFormState) {
 
   const sections = [
     `# ${languageCopy.title}: ${form.projectName || profileName}`,
-    `## ${languageCopy.promptSectionNames.role}\n${languageCopy.promptText.role}\n\n${languageCopy.promptText.objectivePrefix} **${form.projectName || profileName}** using a **${profileName.toLowerCase()}** workflow for ${form.targetAgent || 'the selected agent'}.`,
+    `## ${languageCopy.promptSectionNames.role}\n${languageCopy.promptText.role}\n\n${languageCopy.promptText.objectivePrefix} **${form.projectName || profileName}** using a **${profileName.toLowerCase()}** workflow for ${form.targetAgent || languageCopy.fallbackAgent}.`,
     `## ${languageCopy.promptSectionNames.objective}\n- ${profileGuidance}\n- ${form.constraints}`,
     `## ${languageCopy.promptSectionNames.inputs}\n${languageCopy.promptText.inputsIntro}\n${form.sourceArtifacts}`,
     `## ${languageCopy.promptSectionNames.safeguards}\n${selectedSafeguards
@@ -531,7 +534,7 @@ export default function PromptGenerator({language}: PromptGeneratorProps) {
             </div>
           </div>
 
-          <pre className="overflow-x-auto rounded-xl bg-slate-900 p-4 text-sm leading-6 text-slate-200 whitespace-pre-wrap">
+          <pre className="rounded-xl bg-slate-900 p-4 text-sm leading-6 text-slate-200 whitespace-pre-wrap">
             {prompt}
           </pre>
         </div>
