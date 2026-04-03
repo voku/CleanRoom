@@ -37,6 +37,14 @@ const deliverables: PromptDeliverable[] = [
   'risk-log',
 ];
 
+const fallbackSafeguards: PromptSafeguard[] = ['behavior-only', 'no-source'];
+const fallbackDeliverables: PromptDeliverable[] = ['implementation-plan', 'tests'];
+const textAreaFields = [
+  'sourceArtifacts',
+  'observableBehaviors',
+  'constraints',
+] as const;
+
 const defaultValues: Record<Language, PromptFormState> = {
   en: {
     projectType: 'compatibility-layer',
@@ -284,9 +292,9 @@ function buildPrompt(language: Language, form: PromptFormState) {
   const profileName = languageCopy.projectTypeLabels[form.projectType];
   const profileGuidance = languageCopy.projectTypeGuidance[form.projectType];
   const selectedSafeguards =
-    form.safeguards.length > 0 ? form.safeguards : ['behavior-only', 'no-source'];
+    form.safeguards.length > 0 ? form.safeguards : fallbackSafeguards;
   const selectedDeliverables =
-    form.deliverables.length > 0 ? form.deliverables : ['implementation-plan', 'tests'];
+    form.deliverables.length > 0 ? form.deliverables : fallbackDeliverables;
 
   const sections = [
     `# ${languageCopy.title}: ${form.projectName || profileName}`,
@@ -407,15 +415,11 @@ export default function PromptGenerator({language}: PromptGeneratorProps) {
             />
           </label>
 
-          {[
-            ['sourceArtifacts', languageCopy.sourceArtifacts],
-            ['observableBehaviors', languageCopy.observableBehaviors],
-            ['constraints', languageCopy.constraints],
-          ].map(([field, label]) => (
+          {textAreaFields.map((field) => (
             <label key={field} className="grid gap-2">
-              <span className="font-semibold text-slate-900">{label}</span>
+              <span className="font-semibold text-slate-900">{languageCopy[field]}</span>
               <textarea
-                value={form[field as keyof Pick<PromptFormState, 'sourceArtifacts' | 'observableBehaviors' | 'constraints'>]}
+                value={form[field]}
                 onChange={(event) =>
                   setForm((current) => ({
                     ...current,
