@@ -1,12 +1,13 @@
 # Clean Room
 
-Clean Room is a Vite + React application that pairs a long-form article about clean room engineering with a companion panel about why a “clean room prompt generator” is not enough.
+Clean Room is a Vite + React application that pairs a long-form article about clean room engineering with a companion prompt generator for structured clean-room implementation workflows.
 
 ## What it does
 
 - Explains the legal and engineering context behind clean room development
 - Includes linked references for the main legal and technical topics
-- Offers English and German versions of the article and sidebar commentary
+- Offers English and German versions of the article and prompt generator
+- Generates implementation-side prompts for multiple clean-room agentic coding project profiles
 - Ships as a static site that can be deployed to GitHub Pages
 
 ## Getting started
@@ -49,7 +50,7 @@ If you want to override the base path for another static host, set `VITE_BASE_PA
 - `src/App.tsx` — page layout and scroll progress handling
 - `src/components/Article.tsx` — long-form article content
 - `src/components/Navigation.tsx` — sticky navigation and contribution link
-- `src/components/PromptGenerator.tsx` — sidebar commentary about prompt generators
+- `src/components/PromptGenerator.tsx` — interactive clean-room prompt generator for multiple project profiles
 - `index.html` — app title, favicon, and social metadata
 - `vite.config.ts` — Vite configuration, aliases, and Pages base path
 - `.github/workflows/deploy-pages.yml` — automatic GitHub Pages deployment workflow
